@@ -88,7 +88,10 @@ Python 的灵魂，复习重点在于它们的**括号和特性**。
 | `nlargest(k, iterable)` | 返回最大的 K 个元素 | $O(n \log k)$ |
 | `nsmallest(k, iterable)` | 返回最小的 K 个元素 | $O(n \log k)$ |
 
+## heap取最大的n个数
+
 **nlargest(k, iterable)：取最大的 $k$ 个数**
+
 这个函数会返回 iterable 中最大的 $k$ 个元素，并按**降序（从大到小）**排列。
 
 底层逻辑：它先取输入数据的前 $k$ 个元素，建立一个小顶堆（注意：找最大的数反而用小顶堆）。
@@ -104,6 +107,7 @@ nums = [1, 8, 2, 23, 7, -4, 18, 23, 42, 37, 2]
 result = heapq.nlargest(3, nums)
 print(result)  # 输出: [42, 37, 23]
 ```
+## heap取最小的n个数
 
 **nsmallest(k, iterable)：取最小的 $k$ 个数**
 
@@ -111,6 +115,7 @@ print(result)  # 输出: [42, 37, 23]
 
 底层逻辑：它内部会维护一个大顶堆（找最小的数反而用大顶堆），确保堆顶永远是当前“潜力最小候选组”里最大的那个，一旦发现更小的就替换它。
 
+## heap代码示例
 ```
 import heapq
 
