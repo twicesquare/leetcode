@@ -86,6 +86,7 @@ mapping = {
 题目解法
 ```
 """
+"""
 # Definition for a Node.
 class Node:
     def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
@@ -97,24 +98,28 @@ class Node:
 class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         if not head: return None
-        
-        # 1. 建立映射关系：旧节点 -> 新节点
-        mapping = {}
+
+        # 使用字典映射，先存储旧键新值，val存在，指针另外再看
         curr = head
+        mapping = {} #先空字典
         while curr:
             mapping[curr] = Node(curr.val)
             curr = curr.next
-            
-        # 2. 连接新链表的指针
-        curr = head
+        
+        # 建立地址的映射
+        curr = head # 返回头节点处
         while curr:
-            # mapping[curr] 是新节点
-            # mapping[curr].next 应该指向 curr.next 对应的新节点
-            if curr.next:
-                mapping[curr].next = mapping[curr.next]
+            if curr.next: #就是如果有指向就执行，没有就置空
+                mapping[curr].next = mapping[curr.next] 
+                # 比如 mapping[0x001] = Node(7) Node(7)实际是新分配了一个地址为0x008
+                # mapping[0x001].next实际上是0x008.next
+                # 然后等于mapping[0x002(0x001.next的地址空间)]
+                # 而在上一步创建时mapping[0x002] = Node(13),即为0x009的地址
+                # 所以能够创建 0x008.next = 0x009, 对应原来的0x001.next = 0x002
             if curr.random:
                 mapping[curr].random = mapping[curr.random]
-            curr = curr.next
             
-        return mapping[head]
+            curr = curr.next
+        
+        return mapping[head] # 即mapping[0x001] = 0x008开始的空间
 ```
