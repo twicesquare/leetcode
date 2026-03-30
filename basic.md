@@ -46,6 +46,79 @@ Python 的灵魂，复习重点在于它们的**括号和特性**。
 
 可以使用`len(dict)`
 
+### `defaultdict`
+
+当你创建 `defaultdict(list)` 时，你告诉 Python：“如果我要找的 Key 不存在，请自动帮我创建一个空的 list 放在那里，别报错。”
+
+defaultdict 的第一个参数必须是一个 “可调用对象”（Callable），也就是一个能产生默认值的函数。
+
+`defaultdict(list)`：默认值是 []。常用于分组（像这道题）。
+
+`defaultdict(int)`：默认值是 0。常用于计数（比如统计单词出现次数）。
+
+`defaultdict(set)`：默认值是 set()。常用于去重分组。
+
+#### 1. defaultdict(list)：用于【分组】
+
+这是你处理“字母异位词”时用的。它的默认值是一个空列表 []。
+
+操作逻辑：如果 Key 不存在，先创建一个 []，然后你可以立刻 .append()。
+
+适用场景：一对多关系。例如按班级分学生、按日期分订单。
+
+```
+from collections import defaultdict
+
+# 例子：把名字按首字母分组
+names = ["Alice", "Bob", "Apple", "Blue"]
+groups = defaultdict(list)
+
+for name in names:
+    first_char = name[0]
+    groups[first_char].append(name) # 无需判断 key 是否存在
+
+# 结果：{'A': ['Alice', 'Apple'], 'B': ['Bob', 'Blue']}
+```
+
+#### 2. defaultdict(int)：用于【计数】
+
+它的默认值是整数 0（因为调用 int() 会返回 0）。
+
+操作逻辑：如果 Key 不存在，先放一个 0，然后你可以立刻 += 1。
+
+适用场景：统计频率。例如统计文章词频、统计字符出现次数。
+
+```
+# 例子：统计字符串中字符出现的次数
+text = "abracadabra"
+counts = defaultdict(int)
+
+for char in text:
+    counts[char] += 1 # 第一次遇到 'a' 时，自动从 0 变成 1
+
+# 结果：{'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1}
+```
+
+#### 3. defaultdict(set)：用于【去重分组】
+
+它的默认值是一个空集合 set()。
+
+操作逻辑：如果 Key 不存在，先创建一个 set()，然后你可以立刻 .add()。
+
+适用场景：当你希望每个组里的元素都是唯一的时候。例如统计每个用户访问过哪些不同的页面。
+
+```
+# 例子：记录每个用户看过的视频 ID（不重复记录）
+logs = [("user1", "videoA"), ("user1", "videoB"), ("user1", "videoA")]
+user_history = defaultdict(set)
+
+for user, video in logs:
+    user_history[user].add(video) # 重复的 videoA 只会被存储一次
+
+# 结果：{'user1': {'videoA', 'videoB'}}
+```
+
+
 ## `Set` (集合) `{}`
 无序、元素唯一。常用于去重。
 
